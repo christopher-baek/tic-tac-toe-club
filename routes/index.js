@@ -14,7 +14,9 @@ module.exports = function(game) {
 
   	if (game.gameExists(gameId)) {
   		var playerId = game.addPlayer(gameId);
-  		response.render('index', { title: 'Express', gameId: gameId, playerId: playerId });
+  		response.render('index', { title: 'Express', 
+            gameId: gameId, 
+            playerId: playerId});
   	} else {
   		response.redirect('/');
   	}

@@ -1,6 +1,8 @@
 (function(exports) {
 	var engine = require('./game-engine');
 
+	var uuid = require('node-uuid');
+
 	// Import Socket.IO and attach it to export
 	var io = require('socket.io')();
 	exports.io = io;
@@ -15,6 +17,10 @@
 	exports.startNewGame = function() {
 		var game = new engine.Game();
 		var gameId = game.gameId();
+		var nsp = io.of('/' + gameId);
+		nsp.on('connection', function(socket){
+  			console.log('someone connected'):
+		});
 
 		games[gameId] = game;
 
