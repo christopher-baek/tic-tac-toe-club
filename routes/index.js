@@ -10,7 +10,14 @@ module.exports = function(game) {
 
   // Handle users in a game
   router.get('/:gameId', function(request, response) {
-  	response.render('index', { title: 'Express' });
+  	var gameId = request.params.gameId;
+
+  	if (game.gameExists(gameId)) {
+  		game.addPlayer(gameId);
+  		response.render('index', { title: 'Express' });
+  	} else {
+  		response.redirect('/');
+  	}
   });
 
   return router;

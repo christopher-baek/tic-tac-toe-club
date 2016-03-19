@@ -1,4 +1,6 @@
 (function(exports) {
+	var uuid = require('node-uuid');
+
 	// Import Socket.IO and attach it to export
 	var io = require('socket.io')();
 	exports.io = io;
@@ -8,9 +10,21 @@
 		console.log('someone connected!');
 	});
 
-	// Start a new game
+	var games = {};
+
 	exports.startNewGame = function() {
-		return 69;
+		var gameId = uuid.v4();
+		games[gameId] = 0;
+		return gameId;
+	}
+
+	exports.gameExists = function(gameId) {
+		return gameId in games;
+	}
+
+	exports.addPlayer = function(gameId) {
+		games[gameId] += 1;
+		console.log(games[gameId] + ' players');
 	}
 
 })(module.exports);
