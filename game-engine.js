@@ -9,8 +9,7 @@
 	const STATE_PLAYER_TWO_MOVE = 'PLAYER_TWO_MOVE';
 	const STATE_DONE = 'STATE_DONE';
 
-	function GameEngine(gameId) {
-		this._gameId = gameId;
+	function GameEngine() {
 		this._board = [[0, 0, 0],
 					   [0, 0, 0],
 					   [0, 0, 0]];

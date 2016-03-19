@@ -6,17 +6,12 @@ $(function() {
 	var gameId = $('#gameId').val();
 	var socket = io('/' + gameId);
 	var playerId = null;
-	var board = null;
-	var playerOneJoined = null;
-	var playerTwoJoined = null;
+	var state = null;
+	var board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 
-	socket.on('initialize', function(data) {
-		console.log('received initialization data');
-
+	socket.on('join', function(data) {
+		console.log('received initialization data: ' + data);
 		playerId = data.playerId;
-		board = data.board;
-		playerOneJoined = data.playerOneJoined;
-		playerTwoJoined = data.playerTwoJoined;
 	});
 
 	socket.on('executeMove', function(playerId, cellId) {
@@ -31,6 +26,11 @@ $(function() {
 		console.log('executing move request for ' + playerId + ' at cell ' + cellId);
 		socket.emit('executeMove', playerId, cellId);
 	}
+
+	socket.on('stateChange', function(data) {
+		state = data.state;
+		$('#state').text(data.state);
+	})
 
 	// set up the game board
 	$('.cell').click(function() {
