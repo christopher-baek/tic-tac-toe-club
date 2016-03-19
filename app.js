@@ -5,15 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-//var routes = require('./routes/index');
-var users = require('./routes/users');
-
 var app = express();
 
 // import the game and attach it to the app
 var game = require('./game-server');
 app.game = game;
 
+// import the routes
 var routes = require('./routes/index')(game);
 
 // view engine setup
