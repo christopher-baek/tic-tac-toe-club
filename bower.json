@@ -1,0 +1,24 @@
+{
+  "name": "tic-tac-toe-club",
+  "description": "A multiplayer tic-tac-toe game",
+  "main": "app.js",
+  "authors": [
+    "Christopher Baek <christopher.baek@amazon.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "node"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.2"
+  }
+}
