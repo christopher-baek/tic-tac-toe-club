@@ -29,6 +29,7 @@
 		var playerId = games[gameId].addPlayer();
 		console.log(games[gameId].playerCount() + ' players');
 		console.log("this is player " + playerId);
+		return playerId;
 	}
 
 })(module.exports);
