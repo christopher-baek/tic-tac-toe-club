@@ -3,21 +3,24 @@ extends layout
 block content
   h1= title
 
-  input(id='gameId' type='hidden' value='#{gameId}')
-  input(id='playerId' type='hidden' value='#{playerId}')
-  input(id='url' type='text' disabled)
+  div
+    h2 Invite a friend to this game
+    p Give this URL to your friend
+    input(id='url' type='text' disabled)
 
-  p Welcome to #{title}
-  p Game #{gameId}
-  p Player #{playerId}
-  div #{url}
-  div(id='0' class='cell') 0
-  div(id='1' class='cell') 1
-  div(id='2' class='cell') 2
-  div(id='3' class='cell') 3
-  div(id='4' class='cell') 4
-  div(id='5' class='cell') 5
-  div(id='6' class='cell') 6
-  div(id='7' class='cell') 7
-  div(id='8' class='cell') 8
+  div
+    input(type='hidden' value='#{gameId}')
+    div(id='playerId')
+
+  div
+    div(id='0' class='cell top-row left-column') 0
+    div(id='1' class='cell top-row middle-column') 1
+    div(id='2' class='cell top-row right-column') 2
+    div(id='3' class='cell middle-row left-column') 3
+    div(id='4' class='cell middle-row middle-column') 4
+    div(id='5' class='cell middle-row right-column') 5
+    div(id='6' class='cell bottom-row left-column') 6
+    div(id='7' class='cell bottom-row middle-column') 7
+    div(id='8' class='cell bottom-row' right-column) 8
+  
   script(src='/javascripts/game-gui.js')

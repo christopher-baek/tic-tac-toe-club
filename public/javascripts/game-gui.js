@@ -7,12 +7,16 @@ $(function() {
 	var socket = io('/' + gameId);
 	var playerId = null;
 	var board = null;
+	var playerOneJoined = null;
+	var playerTwoJoined = null;
 
 	socket.on('initialize', function(data) {
 		console.log('received initialization data');
 
 		playerId = data.playerId;
 		board = data.board;
+		playerOneJoined = data.playerOneJoined;
+		playerTwoJoined = data.playerTwoJoined;
 	});
 
 	socket.on('executeMove', function(playerId, cellId) {
@@ -40,5 +44,5 @@ $(function() {
 
 	console.log('executing join request');
 	socket.emit('join');
-	
+
 });

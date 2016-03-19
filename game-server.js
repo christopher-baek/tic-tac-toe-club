@@ -21,7 +21,9 @@
 
 					serverSocket.to(socket.id).emit('initialize', {
 						playerId: playerId,
-						board: gameEngine.board()
+						board: gameEngine.board(),
+						playerOneJoined: gameEngine.playerOneJoined(),
+						playerTwoJoined: gameEngine.playerTwoJoined()
 					});
 
 					console.log('added player ' + playerId);

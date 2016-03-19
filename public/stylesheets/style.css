@@ -6,3 +6,19 @@ body {
 a {
   color: #00B7FF;
 }
+
+div.cell {
+	float: left;
+	width: 33%;
+	height: 33%;
+}
+
+div.top-row, div.middle-row {
+	border-bottom-style: solid;
+	border-width: 1px;
+}
+
+div.left-column, div.middle-column {
+	border-right-style: solid;
+	border-width: 1px;
+}
