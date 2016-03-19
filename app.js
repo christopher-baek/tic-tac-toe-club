@@ -8,11 +8,11 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // import the game and attach it to the app
-var game = require('./game-server');
-app.game = game;
+var gameServer = require('./game-server');
+app.gameServer = gameServer;
 
 // import the routes
-var routes = require('./routes/index')(game);
+var routes = require('./routes/index')(gameServer);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

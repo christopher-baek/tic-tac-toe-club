@@ -33,7 +33,7 @@ server.on('listening', onListening);
  * Socket.io
  */
 
-var io = app.game.io;
+var io = app.gameServer.io;
 io.attach(server);
 
 /**

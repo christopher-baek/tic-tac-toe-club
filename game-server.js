@@ -1,41 +1,57 @@
 (function(exports) {
-	var engine = require('./game-engine');
 
+	var GameEngine = require('./game-engine');
 	var uuid = require('node-uuid');
-
-	// Import Socket.IO and attach it to export
 	var io = require('socket.io')();
 	exports.io = io;
 
-	// Set up Socket.IO
-	io.on('connection', function(socket) {
-		console.log('someone connected!');
-	});
+	var gameEngines = {};
 
-	var games = {};
+	exports.newGame = function() {
+		var gameId = uuid.v4();
+		var serverSocket = io.of('/' + gameId);
+		var gameEngine = new GameEngine.GameEngine(gameId);
 
-	exports.startNewGame = function() {
-		var game = new engine.Game();
-		var gameId = game.gameId();
-		var nsp = io.of('/' + gameId);
-		nsp.on('connection', function(socket){
-  			console.log('someone connected'):
+		serverSocket.on('connection', function(socket) {
+			socket.on('join', function() {
+				console.log('received join request for ' + gameId);
+
+				try {
+					var playerId = gameEngine.addPlayer();
+
+					serverSocket.to(socket.id).emit('initialize', {
+						playerId: playerId,
+						board: gameEngine.board()
+					});
+
+					console.log('added player ' + playerId);
+				} catch(err) {
+					console.log('error adding player: ' + err);
+
+					serverSocket.to(socket.id).emit(err);
+				}
+			});
+
+			socket.on('executeMove', function(playerId, cellId) {
+				console.log('received request to execute move for ' + playerId + ' at cell ' + cellId);
+
+				try {
+					gameEngine.executeMove(playerId, cellId);
+					serverSocket.emit('executeMove', playerId, cellId);
+				} catch(err) {
+					console.log('error executing move: ' + err);
+					
+					serverSocket.to(socket.id).emit(err);
+				}
+			})
 		});
 
-		games[gameId] = game;
-
+		gameEngines[gameId] = gameEngine;
 		return gameId;
 	}
 
-	exports.gameExists = function(gameId) {
-		return gameId in games;
-	}
-
-	exports.addPlayer = function(gameId) {
-		var playerId = games[gameId].addPlayer();
-		console.log(games[gameId].playerCount() + ' players');
-		console.log("this is player " + playerId);
-		return playerId;
+	exports.containsGame = function(gameId) {
+		return gameId in gameEngines;
 	}
 
 })(module.exports);
