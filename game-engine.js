@@ -13,12 +13,15 @@
     const STATE_WAITING_FOR_PLAYER_TWO = 'STATE_WAITING_FOR_PLAYER_TWO';
     const STATE_PLAYER_ONE_MOVE = 'PLAYER_ONE_MOVE';
     const STATE_PLAYER_TWO_MOVE = 'PLAYER_TWO_MOVE';
-    const STATE_DONE = 'STATE_DONE';
+    const STATE_PLAYER_ONE_WINS = 'PLAYER_ONE_WINS';
+    const STATE_PLAYER_TWO_WINS = 'PLAYER_TWO_WINS';
+    const STATE_STALEMATE = 'STALEMATE';
 
     /**
      * Constructor
      */
-    function GameEngine() {
+    function GameEngine(gameId) {
+        this._gameId = gameId;
         this._board = [[0, 0, 0],
                        [0, 0, 0],
                        [0, 0, 0]];
@@ -35,13 +38,13 @@
      */
     GameEngine.prototype.addPlayer = function() {
         if (this._state == STATE_NEW) {
-            console.log('player 1 has joined');
+            console.log(this._gameId + ': player 1 has joined');
 
             this._state = STATE_WAITING_FOR_PLAYER_TWO;
 
             return 1;
         } else if (this._state == STATE_WAITING_FOR_PLAYER_TWO) {
-            console.log('player 2 has joined');
+            console.log(this._gameId + ': player 2 has joined');
 
             this._state = STATE_PLAYER_ONE_MOVE;
 
@@ -92,7 +95,7 @@
         }
 
         // execute the move
-        console.log('executing move for ' + playerId + ' at cell ' + cellId);
+        console.log(this._gameId + ': executing move for ' + playerId + ' at cell ' + cellId);
         this._board[row][column] = playerId;
 
         // update state
@@ -104,25 +107,30 @@
             throw 'IllegalStateError';
         }
 
-        return this._checkForWin();
+        this._checkForWin();
     }
 
     /**
      * Checks board to determine if a player has won the game
-     *
-     * Returns the ID of th player who has won the game if the game has been
-     *   has been one, otherwise 0
      */
     GameEngine.prototype._checkForWin = function() {
-        console.log('checking for win...');
+        console.log(this._gameId + ': checking for win...');
+
+        var winningPlayerId = 0;
 
         // check all the rows
         for (var rowId = 0; rowId < BOARD_ROWS; rowId++) {
             var playerId = this._checkRowForWin(rowId);
 
             if (playerId != 0) {
-                return playerId;
+                winningPlayerId = playerId;
+                break;
             }
+        }
+
+        if (winningPlayerId != 0) {
+            this._setStateOnWin(winningPlayerId);
+            return;
         }
 
         // check all the columns
@@ -130,22 +138,67 @@
             var playerId = this._checkColumnForWin(columnId);
 
             if (playerId != 0) {
-                return playerId;
+                winningPlayerId = playerId;
+                break;
             }
         }
 
-        // check both of the diagonals
-        var playerId = this._checkDiagonalsForWin();
-
-        // update state
-        if (playerId != 0) {
-            console.log(playerId + ' has won the game');
-            this._state = STATE_DONE;
-        } else {
-            console.log('game has not been won');
+        if (winningPlayerId != 0) {
+            this._setStateOnWin(winningPlayerId);
+            return;
         }
 
-        return playerId;
+        // check both of the diagonals
+        winningPlayerId = this._checkDiagonalsForWin();
+
+        if (winningPlayerId != 0) {
+            this._setStateOnWin(winningPlayerId);
+            return;
+        } else {
+            var stalemate = this._checkForStalemate();
+
+            if (!stalemate) {
+                console.log(this._gameId + ': game has not been won');
+            }
+        }
+    }
+
+    GameEngine.prototype._setStateOnWin = function(playerId) {
+        console.log(this._gameId + ': ' + playerId + ' has won the game');
+
+        if (playerId == 1) {
+            this._state = STATE_PLAYER_ONE_WINS;
+        } else if (playerId == 2) {
+            this._state = STATE_PLAYER_TWO_WINS;
+        } else {
+            throw 'IllegalStateError';
+        }
+    }
+
+    GameEngine.prototype._checkForStalemate = function() {
+        console.log(this._gameId + ': checking for stalemate...');
+
+        var stalemate = true;
+
+        for (var rowId = 0; rowId < BOARD_ROWS; rowId++) {
+            for (var columnId = 0; columnId < BOARD_COLUMNS; columnId++) {
+                if (this._board[rowId][columnId] == 0) {
+                    stalemate = false;
+                    break;
+                }
+            }
+
+            if (!stalemate) {
+                break;
+            }
+        }
+
+        if (stalemate) {
+            console.log(this._gameId + ': no one has won the game');
+            this._state = STATE_STALEMATE;
+        }
+
+        return stalemate;
     }
 
     /**
@@ -155,7 +208,7 @@
      *   has been one, otherwise 0
      */
     GameEngine.prototype._checkRowForWin = function(rowId) {
-        console.log('checking row ' + rowId + ' for win...');
+        console.log(this._gameId + ': checking row ' + rowId + ' for win...');
 
         var values = this._board[rowId];
 
@@ -169,7 +222,7 @@
      *   been has been one, otherwise 0
      */
     GameEngine.prototype._checkColumnForWin = function(columnId) {
-        console.log('checking column ' + columnId + ' for win...');
+        console.log(this._gameId + ': checking column ' + columnId + ' for win...');
 
         var values = [];
 
@@ -187,7 +240,7 @@
      *   been has been one, otherwise 0
      */
     GameEngine.prototype._checkDiagonalsForWin = function(startingCellId) {
-        console.log('checking back diagonal for win');
+        console.log(this._gameId + ': checking back diagonal for win');
 
         var values = [];
 
@@ -201,7 +254,7 @@
             return playerId;
         }
 
-        console.log('checking forward diagonal for win');
+        console.log(this._gameId + ': checking forward diagonal for win');
 
         values = []
 
@@ -236,6 +289,13 @@
      */
     GameEngine.prototype.state = function() {
         return this._state;
+    }
+
+    /**
+     * Returns true if the game is over
+     */
+    GameEngine.prototype.isOver = function() {
+        return this._state == STATE_PLAYER_ONE_WINS || this._state == STATE_PLAYER_TWO_WINS || this._state == STATE_STALEMATE;
     }
 
     exports.GameEngine = GameEngine;
