@@ -1,27 +1,30 @@
 extends layout
 
 block content
-  h1= title
 
   div
-    h2 Invite a friend to this game
-    p Give this URL to your friend
+    h3 Give this URL to your friend
     input(id='url' type='text' disabled)
 
   div
     input(id='gameId' type='hidden' value='#{gameId}')
-    div(id='playerId')
-    div(id='state')
+    h3(id='player1' class='player disabled') Player 1 (X)
+    h3(id='player2' class='player disabled') Player 2 (O)
+    p(id='status')
+    h4(id='playerId')
 
-  div
-    div(id='0' class='cell top-row left-column') 0
-    div(id='1' class='cell top-row middle-column') 0
-    div(id='2' class='cell top-row right-column') 0
-    div(id='3' class='cell middle-row left-column') 0
-    div(id='4' class='cell middle-row middle-column') 0
-    div(id='5' class='cell middle-row right-column') 0
-    div(id='6' class='cell bottom-row left-column') 0
-    div(id='7' class='cell bottom-row middle-column') 0
-    div(id='8' class='cell bottom-row' right-column) 0
+  div(class='board')
+    div
+      div(id='0' class='cell empty top-row left-column') -
+      div(id='1' class='cell empty top-row middle-column') -
+      div(id='2' class='cell empty top-row right-column') -
+    div
+      div(id='3' class='cell empty middle-row left-column') -
+      div(id='4' class='cell empty middle-row middle-column') -
+      div(id='5' class='cell empty middle-row right-column') -
+    div
+      div(id='6' class='cell empty bottom-row left-column') -
+      div(id='7' class='cell empty bottom-row middle-column') -
+      div(id='8' class='cell empty bottom-row' right-column) -
   
   script(src='/javascripts/game-gui.js')

@@ -15,7 +15,7 @@ module.exports = function(gameServer) {
 
         if (gameServer.containsGame(gameId)) {
             response.render('index', {
-                title: 'Express',
+                title: 'Tic Tac Toe Club',
                 gameId: gameId
             });
         } else {

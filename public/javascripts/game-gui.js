@@ -78,14 +78,25 @@ $(function() {
      * Executed when a join ack is received from the server
      */
     function onJoin() {
-        $('#playerId').text(playerId);
+        $('#playerId').text('You are player ' + playerId);
     }
 
     /**
      * Executed when a move instruction is received from the server
      */
     function onExecuteMove(playerId, cellId) {
-        $('#' + cellId).text(playerId);
+        var marker;
+
+        if (playerId == 1) {
+            marker = 'X';
+        } else if (playerId == 2) {
+            marker = 'O';
+        } else {
+            alert('unexpected problem executing move');
+        }
+
+        $('#' + cellId).text(marker);
+        $('#' + cellId).removeClass('empty');
         $('#' + cellId).unbind('click');
     }
 
@@ -93,7 +104,33 @@ $(function() {
      * Executed when a state change is received from the server
      */
     function onStateChange() {
-        $('#state').text(state);
+        if (state == STATE_WAITING_FOR_PLAYER_TWO) {
+            $('#status').text('Waiting for player 2 to join...');
+        } else if (state == STATE_PLAYER_ONE_MOVE) {
+            $('#player1').addClass('active');
+            $('#player2').removeClass('active');
+            $('#status').text('Waiting for player 1 to make a move...');
+        } else if (state == STATE_PLAYER_TWO_MOVE) {
+            $('#player1').removeClass('active');
+            $('#player2').addClass('active');
+            $('#status').text('Waiting for player 2 to make a move...');
+        } else if (state == STATE_PLAYER_ONE_WINS) {
+            $('#player1').addClass('winner');
+            $('#player2').addClass('disabed');
+            disableAllCells();
+            $('#status').text('Player 1 wins!');
+        } else if (state == STATE_PLAYER_TWO_WINS) {
+            $('#player2').addClass('winner');
+            $('#player1').addClass('disabed');
+            disableAllCells();
+            $('#status').text('Player 2 wins!');
+        }
+    }
+
+    function disableAllCells() {
+        for (var i = 0; i < 9; i++) {
+            $('#' + i).unbind('click');
+        }
     }
 
     // set up the game board

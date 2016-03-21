@@ -7,18 +7,50 @@ a {
   color: #00B7FF;
 }
 
-div.cell {
-	float: left;
-	width: 33%;
-	height: 33%;
+.board {
+	margin-left:auto; 
+  	margin-right:auto; 
+  	width: 600px; 
 }
 
-div.top-row, div.middle-row {
+.cell {
+	display: inline-block;
+	height: 175px;
+	width: 175px;
+	text-align: center;
+	font-family: 'Comic Sans MS', Helvetica, sans-serif;
+	font-size: 120px;
+}
+
+.top-row, .middle-row {
 	border-bottom-style: solid;
 	border-width: 1px;
+	border-color: black;
 }
 
-div.left-column, div.middle-column {
+.left-column, .middle-column {
 	border-right-style: solid;
 	border-width: 1px;
+	border-color: black;
+}
+
+.empty {
+	color: white;
+}
+
+.disabled {
+	color: lightgray;
+}
+
+.active {
+	color: green;
+}
+
+.winner {
+	color: red;
+}
+
+.player {
+	display: inline-block;
+	margin-right: 10px;
 }
