@@ -133,6 +133,8 @@ $(function() {
 
     function onDisconnect() {
         $('#status').text('Player left the game!');
+        $('#player1').addClass('disabed');
+        $('#player2').addClass('disabed');
         disableAllCells();
     }
 
