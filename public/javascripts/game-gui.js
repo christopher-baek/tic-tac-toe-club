@@ -67,6 +67,10 @@ $(function() {
         onStateChange();
     });
 
+    socket.on('disconnect', function() {
+        onDisconnect();
+    });
+
     /**
      * Send a move request to the server
      */
@@ -125,6 +129,11 @@ $(function() {
             disableAllCells();
             $('#status').text('Player 2 wins!');
         }
+    }
+
+    function onDisconnect() {
+        $('#status').text('Player left the game!');
+        disableAllCells();
     }
 
     function disableAllCells() {
