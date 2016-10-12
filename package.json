@@ -18,5 +18,17 @@
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.4.5",
     "winston": "^2.2.0"
-  }
+  },
+  "description": "Play tic-tac-toe with your friends",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christopherbaek/tic-tac-toe-club.git"
+  },
+  "author": "Christopher Baek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christopherbaek/tic-tac-toe-club/issues"
+  },
+  "homepage": "https://github.com/christopherbaek/tic-tac-toe-club#readme"
 }
